@@ -4,7 +4,7 @@
 
 This project demonstrates how to provision a complete **3-Tier Architecture** on AWS using **Terraform**. With a single `terraform apply --auto-approve`, the entire infrastructure is deployed like magic — securely and efficiently.
 
-![Architecture Diagram](./A_diagram_illustrates_a_3-tier_architecture_deploy.png)
+![Architecture Diagram](https://i.imgur.com/KXlJ8uI.png)
 
 ## 📚 Architecture Overview
 
@@ -40,6 +40,37 @@ This project demonstrates how to provision a complete **3-Tier Architecture** on
 - **Amazon Linux 2023**
 - **CloudWatch** (for logging and monitoring)
 
-## 📂 Project Structure
 
-# aws-three-tier-web-terraform-codes
+## ⚙️ How to Use
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/aws-three-tier-web-terraform-codes.git
+cd aws-three-tier-web-terraform-codes
+```
+
+### 2. Initialize Terraform
+```hcl
+terraform init
+```
+
+### 3. Review the Plan
+```hcl
+terraform plan
+```
+
+### 4. Apply the Infrastructure
+```hcl
+terraform apply --auto-approve
+```
+### 5. Destroy (When Done)
+```hcl
+terraform destroy --auto-approve
+```
+
+## 🔐 Security Highlights
+- Public access is restricted to the Web Tier only.
+- The App Tier and DB Tier reside in private subnets.
+- IAM roles used for EC2 instance permissions (e.g., SSM access).
+- DB credentials stored securely via environment variables or AWS Secrets Manager (optional enhancement).
