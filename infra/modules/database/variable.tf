@@ -1,0 +1,10 @@
+variable "private_db_tier_sg_id" {}
+variable "private_subnet_ids" {}
+variable "identifier" {}
+variable "storage" {}
+variable "engine" {}
+variable "instance_class" {}
+variable "db_name" {}
+variable "db_username" {}
+variable "db_password" {}
+variable "engine_version" {}
