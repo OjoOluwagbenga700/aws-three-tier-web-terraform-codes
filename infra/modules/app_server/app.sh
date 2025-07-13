@@ -14,7 +14,7 @@ curl -fsSL https://rpm.nodesource.com/setup_16.x | bash -
 dnf install -y nodejs
 
 echo "=== Cloning app repo ==="
-sudo -u ec2-user git clone https://github.com/OjoOluwagbenga700/aws-three-tier-web-source-code.git $APP_DIR || true
+sudo -u ec2-user git clone https://github.com/aws-samples/aws-three-tier-web-architecture-workshop.git $APP_DIR || true
 
 echo "=== Installing Node.js dependencies ==="
 cd $APP_PATH

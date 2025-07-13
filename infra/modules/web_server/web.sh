@@ -19,7 +19,7 @@ systemctl restart nginx || systemctl start nginx
 
 # Clone repo and build React app
 sudo -u ec2-user bash -c "
-  git clone https://github.com/OjoOluwagbenga700/aws-three-tier-web-source-code.git $APP_DIR || true
+  git clone https://github.com/aws-samples/aws-three-tier-web-architecture-workshop.git $APP_DIR || true
   cp -r $APP_DIR/application-code/web-tier $WEB_DIR
   cd $WEB_DIR
   npm install && npm run build
