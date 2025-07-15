@@ -6,15 +6,21 @@ APP_DIR="/home/ec2-user/app"
 APP_PATH="$APP_DIR/application-code/app-tier"
 
 echo "=== Updating system and installing packages ==="
-dnf update -y
-dnf install -y git awscli jq mysql curl
+sudo dnf update -y
+sudo dnf install -y https://s3.amazonaws.com/amazon-ssm-us-east-1/latest/linux_amd64/amazon-ssm-agent.rpm
+sudo systemctl enable amazon-ssm-agent
+sudo systemctl start amazon-ssm-agent
+
+sudo dnf install -y git 
+sudo dnf install -y mariadb105
+sudo dnf install -y awscli
 
 echo "=== Installing Node.js 16 ==="
 curl -fsSL https://rpm.nodesource.com/setup_16.x | bash -
-dnf install -y nodejs
+sudo dnf install -y nodejs
 
 echo "=== Cloning app repo ==="
-sudo -u ec2-user git clone https://github.com/aws-samples/aws-three-tier-web-architecture-workshop.git $APP_DIR || true
+sudo -u ec2-user git clone https://github.com/OjoOluwagbenga700/aws-three-tier-web-source-code.git $APP_DIR || true
 
 echo "=== Installing Node.js dependencies ==="
 cd $APP_PATH
@@ -55,4 +61,3 @@ cd $APP_PATH
 sudo -u ec2-user pm2 start index.js
 sudo -u ec2-user pm2 startup systemd -u ec2-user --hp /home/ec2-user
 sudo -u ec2-user pm2 save
-

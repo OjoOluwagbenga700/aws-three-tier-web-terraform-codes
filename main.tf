@@ -46,7 +46,7 @@ module "app_server" {
   app_tier_sg_id            = module.security_groups.private_app_tier_sg_id
   app_instance_type         = var.app_instance_type
   asg_min_size              = 1
-  asg_max_size              = 2
+  asg_max_size              = 1
   asg_desired_capacity      = 1
   ec2_instance_profile_name = module.iam.ec2_instance_profile_name
   depends_on                = [module.iam, module.networking, module.security_groups, module.database]
@@ -71,9 +71,9 @@ module "web_server" {
   web_tier_sg_id            = module.security_groups.web_tier_sg_id
   external_alb_sg_id        = module.security_groups.external_alb_sg_id
   web_instance_type         = var.web_instance_type
-  asg_min_size              = 2
-  asg_max_size              = 2
-  asg_desired_capacity      = 2
+  asg_min_size              = 1
+  asg_max_size              = 1
+  asg_desired_capacity      = 1
   ec2_instance_profile_name = module.iam.ec2_instance_profile_name
   depends_on                = [module.app_server]
 }

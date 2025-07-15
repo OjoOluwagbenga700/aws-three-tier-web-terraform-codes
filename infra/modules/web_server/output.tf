@@ -5,5 +5,5 @@ output "external_alb_dns_name" {
 
 output "web_asg_name" {
   description = "Name of the webautoscaling group"
-  value       = aws_autoscaling_group.web.name
+  value       = aws_autoscaling_group.web-asg.name
 }
