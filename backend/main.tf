@@ -1,5 +1,5 @@
 module "networking" {
-  source               = "./infra/modules/networking"
+  source               = "./modules/networking"
   project_name         = var.project_name
   azs                  = var.azs
   vpc_cidr             = var.vpc_cidr
@@ -10,14 +10,14 @@ module "networking" {
 }
 
 module "security_groups" {
-  source       = "./infra/modules/security_groups"
+  source       = "./modules/security_groups"
   project_name = var.project_name
   vpc_id       = module.networking.vpc_id
   depends_on   = [module.networking]
 }
 
 module "database" {
-  source = "./infra/modules/database"
+  source = "./modules/database"
 
   private_db_tier_sg_id = module.security_groups.private_db_tier_sg_id
   private_subnet_ids    = module.networking.private_subnet_ids
@@ -33,12 +33,12 @@ module "database" {
 }
 
 module "iam" {
-  source       = "./infra/modules/iam"
+  source       = "./modules/iam"
   project_name = var.project_name
 }
 
 module "app_server" {
-  source                    = "./infra/modules/app_server"
+  source                    = "./modules/app_server"
   project_name              = var.project_name
   vpc_id                    = module.networking.vpc_id
   private_subnet_ids        = slice(module.networking.private_subnet_ids, 0, length(var.azs))
@@ -53,7 +53,7 @@ module "app_server" {
 }
 
 module "ssm" {
-  source                = "./infra/modules/ssm"
+  source                = "./modules/ssm"
   db_username           = var.db_username
   db_password           = var.db_password
   db_host_endpoint      = module.database.db_host_endpoint
@@ -62,18 +62,3 @@ module "ssm" {
   depends_on            = [module.app_server]
 }
 
-
-module "web_server" {
-  source                    = "./infra/modules/web_server"
-  project_name              = var.project_name
-  vpc_id                    = module.networking.vpc_id
-  public_subnet_ids         = module.networking.public_subnet_ids
-  web_tier_sg_id            = module.security_groups.web_tier_sg_id
-  external_alb_sg_id        = module.security_groups.external_alb_sg_id
-  web_instance_type         = var.web_instance_type
-  asg_min_size              = 1
-  asg_max_size              = 1
-  asg_desired_capacity      = 1
-  ec2_instance_profile_name = module.iam.ec2_instance_profile_name
-  depends_on                = [module.app_server]
-}
