@@ -81,12 +81,6 @@ variable "db_password" {
   sensitive   = true
 }
 
-variable "web_instance_type" {
-  description = " instance_type for web server"
-  type        = string
-
-}
-
 variable "app_instance_type" {
   description = " instance_type for web server"
   type        = string

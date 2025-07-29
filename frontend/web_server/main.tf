@@ -2,8 +2,8 @@ resource "aws_lb" "external" {
   name               = "${var.project_name}-external-alb"
   internal           = false
   load_balancer_type = "application"
-  subnets            = var.public_subnet_ids
-  security_groups    = [var.web_tier_sg_id, var.external_alb_sg_id]
+  subnets            = data.aws_subnets.public_subnets.ids
+  security_groups    = [data.aws_security_group.web_tier_sg.id, data.aws_security_group.external_alb_sg.id]
 
   tags = {
     Name    = "${var.project_name}-external-alb"
@@ -15,12 +15,13 @@ resource "aws_lb_target_group" "web-tg" {
   name     = "${var.project_name}-web-tg"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = var.vpc_id
+  vpc_id   = data.aws_vpc.vpc_id.id
 
   health_check {
-    path                = "/health"
+    path                = "/"
     protocol            = "HTTP"
     matcher             = "200"
+    port                = "traffic-port"
     interval            = 30
     timeout             = 5
     healthy_threshold   = 2
@@ -46,12 +47,11 @@ resource "aws_lb_listener" "http" {
 
 
 resource "aws_launch_template" "web-lt" {
-  name_prefix   = "${var.project_name}-web-lt"
-  image_id      = data.aws_ami.amazon_linux_2023.id
-  instance_type = var.web_instance_type
-  user_data     = base64encode(templatefile("${path.module}/web.sh", {}))
-  vpc_security_group_ids = [var.web_tier_sg_id]
-
+  name_prefix            = "${var.project_name}-web-lt"
+  image_id               = data.aws_ami.amazon_linux_2023.id
+  instance_type          = var.web_instance_type
+  user_data              = base64encode(templatefile("${path.module}/web.sh", {}))
+  
   tag_specifications {
     resource_type = "instance"
     tags = {
@@ -61,16 +61,22 @@ resource "aws_launch_template" "web-lt" {
   }
 
   iam_instance_profile {
-    name = var.ec2_instance_profile_name
+    name = data.aws_iam_instance_profile.ec2_instance_profile.name
   }
+  network_interfaces {
+    associate_public_ip_address = true
+    security_groups             = [data.aws_security_group.web_tier_sg.id, data.aws_security_group.external_alb_sg.id]
+  }
+
+  
 }
 
 resource "aws_autoscaling_group" "web-asg" {
   name                      = "${var.project_name}-web-asg"
-  min_size                  = var.asg_min_size
-  max_size                  = var.asg_max_size
-  desired_capacity          = var.asg_desired_capacity
-  vpc_zone_identifier       = var.public_subnet_ids
+  min_size                  = 1
+  max_size                  = 1
+  desired_capacity          = 1
+  vpc_zone_identifier       = data.aws_subnets.public_subnets.ids
   target_group_arns         = [aws_lb_target_group.web-tg.arn]
   health_check_type         = "ELB"
   health_check_grace_period = 300

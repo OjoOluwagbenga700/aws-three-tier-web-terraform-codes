@@ -43,18 +43,6 @@ module.exports = Object.freeze({
 });
 EOL
 
-echo "=== Creating database and table ==="
-mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PWD" <<SQL
-CREATE DATABASE IF NOT EXISTS webappdb;
-USE webappdb;
-CREATE TABLE IF NOT EXISTS transactions(
-    id INT NOT NULL AUTO_INCREMENT,
-    amount DECIMAL(10,2),
-    description VARCHAR(100),
-    PRIMARY KEY(id)
-);
-INSERT IGNORE INTO transactions (amount, description) VALUES ('400', 'groceries');
-SQL
 
 echo "=== Starting Node.js app with PM2 ==="
 cd $APP_PATH

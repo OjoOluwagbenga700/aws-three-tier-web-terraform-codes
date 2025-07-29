@@ -51,11 +51,11 @@ resource "aws_security_group" "web_tier_sg" {
   }
 
   ingress {
-    description     = "Allow inbound HTTPS traffic from internet"
-    from_port       = 443
-    to_port         = 443
+    description     = "Allow health check"
+    from_port       = 80
+    to_port         = 80
     protocol        = "tcp"
-    security_groups = [aws_security_group.external_alb_sg.id]
+    cidr_blocks = ["0.0.0.0/0"]
   }
   # Allow all outbound traffic
   egress {
@@ -123,14 +123,7 @@ resource "aws_security_group" "private_app_tier_sg" {
     protocol        = "tcp"
     security_groups = [aws_security_group.internal_alb_sg.id]
   }
-  ingress {
-    description     = "Allow inbound HTTP traffic from internal ALB"
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    security_groups = [aws_security_group.internal_alb_sg.id]
-  }
-
+  
   # Allow all outbound traffic
   egress {
     from_port   = 0
