@@ -35,19 +35,19 @@ variable "user_data" {
   default     = ""
 }
 
-variable "asg_min_size" {
+variable "app_asg_min_size" {
   description = "Minimum number of app servers in the ASG"
   type        = number
   default     = 1
 }
 
-variable "asg_max_size" {
+variable "app_asg_max_size" {
   description = "Maximum number of app servers in the ASG"
   type        = number
   default     = 2
 }
 
-variable "asg_desired_capacity" {
+variable "app_asg_desired_capacity" {
   description = "Desired number of app servers in the ASG"
   type        = number
   default     = 2

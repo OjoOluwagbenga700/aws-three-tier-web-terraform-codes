@@ -66,13 +66,13 @@ resource "aws_launch_template" "app" {
 
 resource "aws_autoscaling_group" "app" {
   name                      = "${var.project_name}-app-asg"
-  min_size                  = var.asg_min_size
-  max_size                  = var.asg_max_size
-  desired_capacity          = var.asg_desired_capacity
+  min_size                  = var.app_asg_min_size
+  max_size                  = var.app_asg_max_size
+  desired_capacity          = var.app_asg_desired_capacity
   vpc_zone_identifier       = var.private_subnet_ids
   target_group_arns         = [aws_lb_target_group.app.arn]
   health_check_type         = "ELB"
-  health_check_grace_period = 300
+  health_check_grace_period = 360
   launch_template {
     id      = aws_launch_template.app.id
     version = "$Latest"

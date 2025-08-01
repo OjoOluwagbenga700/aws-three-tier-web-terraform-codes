@@ -87,9 +87,36 @@ variable "app_instance_type" {
 
 }
 
+variable "web_instance_type" {
+  description = "Instance type for the web server EC2 instances"
+  type        = string
+}
+variable "web_asg_desired_capacity" {
+  description = "Desired number of web servers in the ASG"
+  type        = number
+}
+variable "web_asg_max_size" {
+  description = "Maximum number of web servers in the ASG"
+  type        = number
+}
 
+variable "web_asg_min_size" {
+  description = "Minimum number of web servers in the ASG"
+  type        = number
+}
 
+variable "app_asg_desired_capacity" {
+  description = "Desired number of app servers in the ASG"
+  type        = number
+}
+variable "app_asg_max_size" {
+  description = "Maximum number of app servers in the ASG"
+  type        = number
+}
 
-
+variable "app_asg_min_size" {
+  description = "Minimum number of app servers in the ASG"
+  type        = number
+}
 
 
